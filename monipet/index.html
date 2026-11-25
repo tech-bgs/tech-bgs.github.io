@@ -1,0 +1,216 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>모니펫 — 말하면 들어주는 맥 속 강아지</title>
+<meta name="description" content="한국어로 말하면 알림, 타이머, 앱 열기를 해 주는 맥 속 강아지. 인터넷 없이, 무료로.">
+<style>
+:root{color-scheme:light;--paper:#f3f5fb;--card:#fff;--ink:#16181f;--soft:#5c6272;--line:#dfe3ee;--black:#000;--tongue:#e98186;--tongue-deep:#b9474f;--sun:#ffcb2f;--eye:#edf1fb}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--paper);color:var(--ink);font:17px/1.65 -apple-system,"Apple SD Gothic Neo","Noto Sans KR",sans-serif;word-break:keep-all;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1040px;margin:0 auto;padding:0 20px}
+h1,h2,h3{line-height:1.22;letter-spacing:-.025em;margin:0;text-wrap:balance}
+h2{font-size:clamp(27px,4.4vw,40px);font-weight:800}
+p{margin:0}
+a{color:inherit}
+header{display:flex;justify-content:space-between;align-items:center;padding:22px 0}
+.name{font-weight:800;font-size:20px;letter-spacing:-.03em}
+header a{font-size:15px;color:var(--soft);text-underline-offset:4px}
+.hero{display:grid;grid-template-columns:1fr 1.05fr;gap:52px;align-items:center;padding:36px 0 84px}
+h1{font-size:clamp(38px,6.2vw,64px);font-weight:900;letter-spacing:-.045em;line-height:1.08}
+.lead{font-size:19px;color:var(--soft);margin:20px 0 28px;max-width:25em}
+.btn{display:inline-block;border:0;border-radius:14px;background:var(--ink);color:#fff;font:700 17px/1 inherit;font-family:inherit;padding:18px 24px}
+.btn[aria-disabled=true]{background:#d4d9e6;color:#4a5060;cursor:not-allowed}
+.small{font-size:14px;color:var(--soft);margin-top:12px}
+.pet{background:var(--black);border-radius:44px;padding:16px;box-shadow:0 28px 60px -24px rgba(22,24,31,.55)}
+.pet img{display:block;width:100%;aspect-ratio:456/280;object-fit:contain}
+.said{min-height:112px;margin-top:18px;display:flex;flex-direction:column;gap:8px}
+.bubble{max-width:88%;padding:10px 16px;border-radius:18px;font-size:16px;line-height:1.45}
+.me{align-self:flex-end;background:var(--tongue);color:#2a0a0c;border-bottom-right-radius:5px}
+.it{align-self:flex-start;background:var(--card);border:1px solid var(--line);border-bottom-left-radius:5px}
+.try{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+.try button{font:600 15px/1 inherit;font-family:inherit;color:var(--ink);background:var(--card);border:1.5px solid var(--line);border-radius:999px;padding:13px 16px;cursor:pointer}
+.try button:hover{border-color:var(--ink)}
+:focus-visible{outline:3px solid var(--tongue-deep);outline-offset:3px}
+section{padding:76px 0}
+.dark{background:var(--black);color:#fff}
+.dark p{color:#b9c0d2}
+.facts{display:grid;grid-template-columns:repeat(3,1fr);gap:34px;margin-top:38px}
+.facts b{display:block;font-size:22px;letter-spacing:-.02em;margin-bottom:6px;color:var(--eye)}
+.does{margin:34px 0 0;padding:0;list-style:none;border-top:1.5px solid var(--ink)}
+.does li{display:grid;grid-template-columns:1fr 1.5fr;gap:24px;padding:19px 0;border-bottom:1px solid var(--line);align-items:baseline}
+.does q{font-weight:700;font-size:19px;letter-spacing:-.02em;quotes:"“" "”"}
+.does span{color:var(--soft)}
+.three{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:34px}
+.way{background:var(--card);border-radius:30px;padding:14px 14px 26px;display:flex;flex-direction:column}
+.way>:not(.pic){margin-left:12px;margin-right:12px}
+.way h3{font-size:25px;font-weight:800;margin-top:22px}
+.way .price{font-weight:700;color:var(--tongue-deep);margin-top:4px}
+.way p:not(.price){color:var(--soft);margin-top:12px;margin-bottom:22px}
+.way .btn{margin-top:auto;align-self:flex-start;font-size:15px;padding:15px 18px;text-decoration:none}
+.btn{text-decoration:none}
+.btn.ghost{background:transparent;color:var(--ink);box-shadow:inset 0 0 0 2px var(--ink)}
+.pic{height:210px;border-radius:20px;overflow:hidden;position:relative}
+.pic.screen{background:linear-gradient(160deg,#f6b8bb,#fbe3d6)}
+.mini{position:absolute;right:16px;bottom:16px;width:62%;background:#000;border-radius:24px;padding:8px}
+.mini img{display:block;width:100%}
+.pic.plus{background:#000;display:grid;place-items:center}
+.pic.plus img{width:88%}
+.pic.photo img{width:100%;height:100%;object-fit:cover}
+.steps{counter-reset:s;list-style:none;margin:30px 0 0;padding:0;display:grid;gap:14px}
+.steps li{counter-increment:s;display:grid;grid-template-columns:44px 1fr;gap:16px;background:var(--card);border-radius:20px;padding:20px 22px}
+.steps li:before{content:counter(s);width:40px;height:40px;border-radius:12px;background:var(--ink);color:#fff;font-weight:800;display:grid;place-items:center}
+.steps p{color:var(--soft)}
+.steps b{display:block;font-size:18px}
+.block{display:flex;flex-wrap:wrap;gap:20px 26px;align-items:center;margin-top:16px}
+.steps li>div{min-width:0}
+.dlg{width:250px;max-width:100%;flex:0 1 250px;background:#eceef3;border:1px solid var(--line);border-radius:24px;padding:18px;font-size:13px;line-height:1.4}
+.dlg strong{display:block;margin-bottom:6px}
+.dlg i{display:block;font-style:normal;text-align:center;background:#dcdfe6;border-radius:999px;padding:7px;margin-top:8px}
+.dlg i.no{color:#6b7180;text-decoration:line-through}
+.dlg i.no:first-of-type{margin-top:14px}
+.dlg i.yes{font-weight:700;outline:3px solid var(--tongue-deep);outline-offset:2px;margin-top:12px}
+.steps .block .say{flex:1 1 230px;color:var(--ink);font-size:17px}
+.block .say b{font-size:21px;letter-spacing:-.02em;margin-bottom:6px}
+.note{margin-top:18px;font-size:15px;color:var(--soft)}
+details{border-bottom:1px solid var(--line);padding:4px 0}
+summary{cursor:pointer;font-weight:700;font-size:18px;padding:15px 0;letter-spacing:-.015em}
+details p{color:var(--soft);padding:0 0 18px;max-width:46em}
+footer{padding:44px 0 64px;font-size:14px;color:var(--soft)}
+@media (max-width:820px){.hero{grid-template-columns:1fr;gap:34px;padding:14px 0 56px}.facts,.three{grid-template-columns:1fr;gap:24px}.three{gap:16px}.does li{grid-template-columns:1fr;gap:4px}section{padding:58px 0}.pet{border-radius:34px}}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header><span class="name">모니펫</span><a href="#install">설치 방법</a></header>
+
+  <div class="hero">
+    <div>
+      <h1>말하면 들어주는<br>맥 속 강아지</h1>
+      <p class="lead">한국어로 말하면 알림, 타이머, 앱 열기를 대신 해요. 인터넷 없이, 무료로.</p>
+      <a class="btn" href="https://github.com/tech-bgs/monipet/releases/download/v0.3/MoniPet-0.3.dmg">무료로 받기</a>
+      <p class="small">M1 이상 맥 · macOS 14 이상 · 0.5GB (AI 4.6GB는 앱에서 받아요)</p>
+    </div>
+    <div>
+      <div class="pet"><img id="face" src="faces/idle.gif" alt="모니펫 강아지 얼굴"></div>
+      <div class="said" id="said" aria-live="polite"><div class="bubble it">눌러서 시켜 봐.</div></div>
+      <div class="try" id="try"></div>
+    </div>
+  </div>
+</div>
+
+<section class="dark"><div class="wrap">
+  <h2>말한 내용은 맥 안에만 있어요</h2>
+  <div class="facts">
+    <p><b>한국어로 말해요</b>듣는 것도, 생각하는 것도, 대답하는 것도 맥 안에서 해요.</p>
+    <p><b>와이파이를 꺼도 돼요</b>AI를 한 번 받아 두면 인터넷 없이 움직여요.</p>
+    <p><b>무료예요</b>가입도, 카드 등록도 없어요.</p>
+  </div>
+</div></section>
+
+<section><div class="wrap">
+  <h2>이렇게 말하면 돼요</h2>
+  <ul class="does">
+    <li><q>글피 오후 4시에 세탁소 알려 줘</q><span>날짜를 계산해서 그 시간에 알려 줘요.</span></li>
+    <li><q>40분마다 물 마시라고 해</q><span>정한 시간마다 알려 줘요. "마셨어" 하면 기록해요.</span></li>
+    <li><q>25분 집중 타이머 켜 줘</q><span>집중하는 동안 크롬과 사파리의 유튜브, 인스타 같은 탭을 닫아 줘요.</span></li>
+    <li><q>계산기 꺼 줘</q><span>앱을 열고 꺼요. 끌 때는 먼저 허락을 받아요.</span></li>
+    <li><q>자리 비울게</q><span>화면을 잠그고, 누가 화면을 보면 경고해요.</span></li>
+    <li><q>커피 마실까 말까</q><span>그냥 이야기해도 돼요.</span></li>
+  </ul>
+</div></section>
+
+<section style="padding-top:0"><div class="wrap">
+  <h2>어떻게 만날래요?</h2>
+  <div class="three">
+    <article class="way">
+      <div class="pic screen"><div class="mini"><img src="faces/happy.gif" alt=""></div></div>
+      <h3>맥 화면에서</h3><p class="price">무료</p>
+      <p>앱만 있으면 강아지가 화면 구석에 살아요. 눌러서 말하고, 끌어서 옮겨요.</p>
+      <a class="btn" href="https://github.com/tech-bgs/monipet/releases/download/v0.3/MoniPet-0.3.dmg">무료로 받기</a>
+    </article>
+    <article class="way">
+      <div class="pic plus"><img src="faces/surprised.gif" alt=""></div>
+      <h3>더 똑똑하게</h3><p class="price">유료 · 준비 중</p>
+      <p>인터넷 AI가 화면을 보고 대신 눌러 주고, 찾아 주고, 사진도 고쳐요.</p>
+      <span class="btn" role="button" aria-disabled="true">준비 중</span>
+    </article>
+    <article class="way">
+      <div class="pic photo"><img src="monipet.jpg" alt="노트북 화면 위에 앉아 있는 모니펫"></div>
+      <h3>노트북 화면 위에</h3><p class="price">직접 만들기</p>
+      <p>작은 화면 보드와 3D 프린터로 만든 집에 넣어 화면 위에 올려요.</p>
+      <a class="btn ghost" href="#make">만드는 순서 보기</a>
+    </article>
+  </div>
+</div></section>
+
+<section id="make" style="padding-top:0"><div class="wrap">
+  <h2>화면 위에 올리는 모니펫</h2>
+  <p class="lead" style="margin-bottom:0">꼭 필요한 건 아니에요. 앱만으로도 다 돼요. 책상 위에 두고 싶은 분을 위한 안내예요.</p>
+  <ol class="steps">
+    <li><div><b>보드를 준비해요</b><p>Waveshare ESP32-S3-Touch-AMOLED-1.64. 뒷면에 Rev1이라고 적힌 보드에서 확인했어요. 다른 판은 화면이 안 나올 수 있어요.</p></div></li>
+    <li><div><b>집을 3D 프린터로 뽑아요</b><p>지금은 시험판이에요. 보드는 안 빠지지만 옆 입구 마감이 거칠어요.</p></div></li>
+    <li><div><b>보드에 모니펫을 넣어요</b><p>USB 선으로 맥에 꽂고 넣어요. 터미널에 명령어를 몇 줄 넣어야 해요.</p></div></li>
+    <li><div><b>집에 넣고 노트북 화면 위에 끼워요</b><p>USB 선으로 맥에 꽂아 두면 앱이 보드를 찾아요. 꾹 누르고 말하면 돼요.</p></div></li>
+  </ol>
+  <p style="margin-top:22px"><a class="btn ghost" href="https://github.com/tech-bgs/monipet">GitHub에서 파일 받기</a></p>
+</div></section>
+
+<section id="install" style="padding-top:0"><div class="wrap">
+  <h2>설치 방법</h2>
+  <ol class="steps">
+    <li><div><b>모니펫을 응용 프로그램 폴더에 넣어요</b><p>받은 MoniPet 파일을 열고, MoniPet을 응용프로그램으로 끌어다 놓으면 돼요.</p></div></li>
+    <li><div><b>두 번 눌러요. 맥이 막으면 "완료"를 눌러요</b><p>아직 애플의 확인을 받지 않은 앱이라 맥이 한 번 막아요.</p>
+      <div class="block">
+        <div class="dlg" role="img" aria-label="맥이 MoniPet을 막는 창. 휴지통으로 이동 말고 완료를 눌러요.">
+          <strong>‘MoniPet’을(를) 열지 않음</strong>Apple은 ‘MoniPet’에 사용자의 Mac에 손상을 입히거나 사용자의 개인정보에 침입할 수 있는 악성 코드가 없음을 확인할 수 없습니다.
+          <i class="no">휴지통으로 이동</i><i class="yes">완료</i>
+        </div>
+        <p class="say"><b>"완료"를 누르세요</b>"휴지통으로 이동"을 누르면 모니펫이 지워져요. 이 창은 애플이 아직 확인하지 못한 앱이라는 뜻이에요.</p>
+      </div></div></li>
+    <li><div><b>시스템 설정 → 개인정보 보호 및 보안 → 그래도 열기</b><p>아래로 내리면 "보안"에 있어요. 한 번 더 물으면 "그래도 열기"를 또 누르고, 맥 암호나 지문을 넣어요. 2번을 하고 나서 약 1시간 동안만 보여요. 안 보이면 2번을 다시 하세요.</p></div></li>
+    <li><div><b>"AI 받기"를 눌러요</b><p>4.6GB를 한 번만 받아요. 끊겨도 이어서 받아요.</p></div></li>
+    <li><div><b>"모니펫" 하고 불러요</b><p>마이크를 쓴다고 물으면 허용해 주세요.</p></div></li>
+  </ol>
+  <p class="note">애플의 확인을 받지 않은 앱을 여는 것은 믿을 수 있는 곳에서 받았을 때만 하세요. 모니펫은 이 페이지에서만 받으세요.</p>
+</div></section>
+
+<section style="padding-top:0"><div class="wrap">
+  <h2 style="margin-bottom:20px">자주 묻는 것</h2>
+  <details><summary>어떤 맥에서 되나요?</summary><p>M1 이상 칩, macOS 14 이상에서 쓰도록 만들었어요. 지금까지는 메모리 16GB 맥에서 확인했어요. 8GB 맥은 아직 확인하지 못했어요. 윈도우는 안 돼요.</p></details>
+  <details><summary>왜 4.6GB를 받나요?</summary><p>모니펫이 말을 알아듣고 대답하게 해 주는 AI예요. 구글이 공개한 Gemma를 써요. 맥 안에 두기 때문에 인터넷 없이 무료로 쓸 수 있어요.</p></details>
+  <details><summary>내 말이 밖으로 나가나요?</summary><p>무료 모니펫은 맥 안에서 듣고 생각해요. AI를 처음 받을 때만 인터넷을 써요.</p></details>
+  <details><summary>카메라는 왜 쓰나요?</summary><p>"자리 비울게"를 켰을 때만, 누가 화면을 보는지 확인하려고 써요. 사진은 저장하지 않아요.</p></details>
+  <details><summary>기계를 따로 사야 하나요?</summary><p>아니요. 앱만 있으면 돼요. 강아지 얼굴도 맥 화면에 나와요.</p></details>
+</div></section>
+
+<footer><div class="wrap">모니펫은 구글이나 애플이 만든 앱이 아니에요. 쓰인 기술: Gemma 4 (Apache 2.0), llama.cpp (MIT), whisper.cpp (MIT).</div></footer>
+
+<script>
+(function(){
+  var face=document.getElementById('face'),said=document.getElementById('said'),box=document.getElementById('try'),run=0;
+  ['idle','listen','think','talk','happy'].forEach(function(n){new Image().src='faces/'+n+'.gif'});
+  function tomorrow(){var d=new Date();d.setDate(d.getDate()+1);return (d.getMonth()+1)+'월 '+d.getDate()+'일 '+'일월화수목금토'[d.getDay()]+'요일'}
+  var list=[
+    ['내일 오후 3시에 치과 알려 줘',function(){return '내일, '+tomorrow()+' 오후 3시에 알려 줄게. 치과.'},'talk'],
+    ['25분 집중 타이머 켜 줘',function(){return '25분 집중 시작했어.'},'talk'],
+    ['나 오늘 구독자 천 명 됐어',function(){return '와 대박! 진짜 잘됐다. 축하해.'},'happy']
+  ];
+  function bubble(t,c){var b=document.createElement('div');b.className='bubble '+c;b.textContent=t;said.appendChild(b)}
+  function show(n){face.src='faces/'+n+'.gif'}
+  function wait(ms){return new Promise(function(r){setTimeout(r,ms)})}
+  async function play(x){
+    var me=++run,go=function(){return me===run};
+    said.textContent='';bubble(x[0],'me');show('listen');
+    await wait(1100);if(!go())return;show('think');
+    await wait(900);if(!go())return;show(x[2]);bubble(x[1](),'it');
+    await wait(3600);if(go())show('idle');
+  }
+  list.forEach(function(x){var b=document.createElement('button');b.type='button';b.textContent=x[0];b.onclick=function(){play(x)};box.appendChild(b)});
+})();
+</script>
+</body>
+</html>
